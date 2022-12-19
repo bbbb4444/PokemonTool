@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane prefHeight="400.0" prefWidth="403.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pokemontool.MainController">
+   <children>
+      <HBox layoutX="27.0" layoutY="49.0" spacing="6.0">
+         <children>
+            <Button fx:id="prev" mnemonicParsing="false" onAction="#goToPrevPoke" text="Prev" />
+            <Button fx:id="next" mnemonicParsing="false" onAction="#goToNextPoke" text="Next" />
+         </children>
+      </HBox>
+      <Button layoutX="225.0" layoutY="17.0" mnemonicParsing="false" onAction="#switchToScene1" text="Main menu" />
+      <TextField fx:id="pokemonSearchField" layoutX="16.0" layoutY="14.0" onAction="#changePokemonManually" prefHeight="25.0" prefWidth="107.0" promptText="Charmander" />
+      <TextArea fx:id="pokemonMovesetArea" disable="true" layoutX="362.0" layoutY="319.0" prefHeight="42.0" prefWidth="28.0" />
+      <Label fx:id="evoLvlLabel" layoutX="15.0" layoutY="82.0" text="." textAlignment="RIGHT" />
+      <ImageView fx:id="pokemon_icon" fitHeight="64.0" fitWidth="64.0" layoutX="135.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
+      <GridPane fx:id="baseStatsGrid" layoutX="16.0" layoutY="131.0" prefHeight="132.0" prefWidth="137.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="29.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="171.0" minWidth="10.0" prefWidth="25.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="90.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="HP" />
+            <Label text="ATK" GridPane.rowIndex="1" />
+            <Label text="DEF" GridPane.rowIndex="2" />
+            <Label text="SPE" GridPane.rowIndex="3" />
+            <Label text="SPA" GridPane.rowIndex="4" />
+            <Label text="SPD" GridPane.rowIndex="5" />
+            <Label fx:id="hpVal" text="0" GridPane.columnIndex="1" />
+            <Label fx:id="atkVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="defVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="speVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="spaVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label fx:id="spdVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Rectangle fx:id="hpBar" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="16.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" />
+            <Rectangle fx:id="atkBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Rectangle fx:id="defBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="47.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Rectangle fx:id="speBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="77.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Rectangle fx:id="spaBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="107.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Rectangle fx:id="spdBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="107.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+         </children>
+      </GridPane>
+      <ScrollPane layoutX="189.0" layoutY="121.0" prefHeight="200.0" prefWidth="200.0">
+         <content>
+            <VBox fx:id="pokemonMovesetsVBox" prefHeight="198.0" prefWidth="185.0" />
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>
