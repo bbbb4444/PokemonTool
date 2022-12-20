@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,6 +22,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,9 +45,6 @@ public class MainController {
     Button prev;
 
     @FXML
-    TextArea pokemonMovesetArea;
-
-    @FXML
     VBox pokemonMovesetsVBox;
 
     @FXML
@@ -57,6 +56,9 @@ public class MainController {
     Rectangle hpBar, atkBar, defBar, spaBar, spdBar, speBar;
     @FXML
     GridPane baseStatsGrid;
+
+    @FXML
+    Label moveVal, typeVal, categoryVal, ppVal, powerVal, accuracyVal, effectVal;
 
     private Stage stage;
     private Scene scene;
@@ -72,9 +74,11 @@ public class MainController {
         pokemon_icon.setImage(bulba);
     }
 
+
     public void displayName(String username) {
         nameLabel.setText("Hello: " + username);
     }
+
 
     public void goToNextPoke(ActionEvent e) throws IOException {
         pokemon_name = Main.pokemon.get(Main.pokemon.indexOf(pokemon_name)+1);
@@ -85,6 +89,7 @@ public class MainController {
         populateMovesetArea();
     }
 
+
     //Switch back to main manu
     public void switchToScene1(ActionEvent e) throws IOException {
         root = FXMLLoader.load(getClass().getResource("main.fxml"));
@@ -94,60 +99,100 @@ public class MainController {
         stage.show();
     }
 
-    //Change the pokemon label when pokemon name is entered
+
+    //Update pokemon_name variable when Pokemon name is entered
     public void changePokemonManually(ActionEvent e) throws IOException {
         pokemon_name = pokemonSearchField.getText().toLowerCase();
         populateMovesetArea();
     }
 
-    //Populate moveset text area using pokemon label
-    public void populateMovesetArea() throws IOException {
 
-        pokemonMovesetArea.setText("");
-        System.out.println(pokemon_name);
-
-        String line;
-
-        Pattern poke_name = Pattern.compile("^"+(pokemon_name)+"Ev", Pattern.CASE_INSENSITIVE);
-        Pattern level_and_move = Pattern.compile(".+ (.+),(.+)");
+    //given the index of a Pokemon, display its evolution information
+    public void displayEvolutionInfo(int poke) {
         Pattern evolution_level = Pattern.compile(".+,([0-9]+),([a-zA-Z]+)");
         Matcher matcher;
+        String evo_data = Main.pokemonstats.get(poke).get(1).trim();
+        if (evo_data.equals("db 0 ; no more evolutions"))
+            evoLvlLabel.setText("Does not evolve.");
+
+        else if (evo_data.startsWith("db EVOLVE_ITEM"))
+        {
+            String[] evo_item_data = evo_data.split(",");
+            evoLvlLabel.setText("Evolves into " + evo_item_data[2] + " with " + evo_item_data[1]);
+        }
+        else if (evo_data.startsWith("db EVOLVE_HAPPINESS"))
+        {
+            String[] evo_item_data = evo_data.split(",");
+            evoLvlLabel.setText("Evolves into " + evo_item_data[2] + " with high friendship");
+        }
+        else
+        {
+            matcher = evolution_level.matcher(evo_data);
+            matcher.find();
+            String lvl = matcher.group(1);
+            String next_evo = matcher.group(2);
+            evoLvlLabel.setText("Evolves into " + next_evo + " starting at level " + lvl);
+        }
+    }
+
+
+    //given the index of a Pokemon, display its moveset
+    public void displayMoveset(int poke) {
+        pokemonMovesetsVBox.getChildren().clear();
+        for (int move_i = 3; move_i<Main.pokemonstats.get(poke).size()-1;move_i++)
+        {
+            String pokemon_move = Main.pokemonstats.get(poke).get(move_i).trim();
+            pokemon_move = pokemon_move.replaceAll("^db ","").replaceAll(",", "\t").replaceAll("_"," ");
+            Button move = new Button(pokemon_move);
+            move.setPadding(new Insets(1,4,1,4));
+
+            String finalPokemon_move = pokemon_move.replaceAll("[0-9].","").trim();
+            move.setOnAction(e -> displayMoveInfo(finalPokemon_move));
+
+            pokemonMovesetsVBox.getChildren().add(move);
+        }
+    }
+
+    List<String> physicalTypes = new ArrayList<>(
+            Arrays.asList("Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel"));
+    private boolean isPhysical (String move) {
+        return (physicalTypes.contains(move));
+    }
+
+    public void displayMoveInfo (String pokemon_move) {
+        for (String[] move : Main.moves) {
+            if (move[0].equalsIgnoreCase(pokemon_move)) {
+                moveVal.setText(move[0]);
+                typeVal.setText(move[1]);
+
+                if (move[3].equals("N/A"))
+                    categoryVal.setText("Status");
+                else if (isPhysical(move[1]))
+                    categoryVal.setText("Physical");
+                else
+                    categoryVal.setText("Special");
+
+                ppVal.setText(move[2]);
+                powerVal.setText(move[3]);
+                accuracyVal.setText(move[4]);
+                effectVal.setText(move[5]);
+            }
+        }
+    }
+
+
+    //Finds the Pokemon (in the variable pokemon_name) in the pokemonstats list, and then populates the evo info box and moveset info box
+    public void populateMovesetArea() throws IOException {
+        System.out.println(pokemon_name);
+        Pattern poke_name = Pattern.compile("^"+(pokemon_name)+"Ev", Pattern.CASE_INSENSITIVE);
+        Matcher matcher;
+
         for (int poke = 0; poke<Main.pokemonstats.size();poke++)
         {
             matcher = poke_name.matcher(Main.pokemonstats.get(poke).get(0));
             if (matcher.find()) {
-
-                //display evolution data
-                String evo_data = Main.pokemonstats.get(poke).get(1).trim();
-                if (evo_data.equals("db 0 ; no more evolutions"))
-                    evoLvlLabel.setText("Does not evolve.");
-
-                else if (evo_data.startsWith("db EVOLVE_ITEM"))
-                {
-                    String[] evo_item_data = evo_data.split(",");
-                    evoLvlLabel.setText("Evolves into " + evo_item_data[2] + " with " + evo_item_data[1]);
-                }
-
-                else
-                {
-                    matcher = evolution_level.matcher(evo_data);
-                    matcher.find();
-                    String lvl = matcher.group(1);
-                    String next_evo = matcher.group(2);
-                    evoLvlLabel.setText("Evolves into " + next_evo + " starting at level " + lvl);
-                }
-
-                //display moveset
-                for (int move_i = 3; move_i<Main.pokemonstats.get(poke).size()-1;move_i++)
-                {
-                    String pokemon_move = Main.pokemonstats.get(poke).get(move_i).trim();
-                    pokemon_move = pokemon_move.replaceAll("^db ","").replaceAll(",", "\t").replaceAll("_"," ");
-                    Button move = new Button(pokemon_move);
-                    move.setPadding(new Insets(1,4,1,4));
-                    pokemonMovesetsVBox.getChildren().add(move);
-
-                    pokemonMovesetArea.appendText(pokemon_move+"\n");
-                }
+                displayEvolutionInfo(poke);
+                displayMoveset(poke);
             }
         }
 
@@ -155,6 +200,11 @@ public class MainController {
         populateStatsArea();
     }
 
+
+
+
+
+    //Populates Pokemon basestats area
     public void populateStatsArea() throws IOException {
         InputStream in = getClass().getResource("/base_stats/" + pokemon_name + ".asm").openStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -183,21 +233,6 @@ public class MainController {
                 }
             }
         }
-
-
-//        hpVal.setText(base_stats_str[0]);
-//        atkVal.setText(base_stats_str[1]);
-//        defVal.setText(base_stats_str[2]);
-//        spaVal.setText(base_stats_str[3]);
-//        spdVal.setText(base_stats_str[4]);
-//        speVal.setText(base_stats_str[5]);
-//
-//        hpBar.setWidth(base_stats[0]);
-//        hpBar.setFill(Color.hsb(base_stats[0],1.0,1.0));
-//        atkBar.setWidth(base_stats[1]);
-//        atkBar.setFill(Color.hsb(base_stats[1],1.0,1.0));
-//        defBar.setWidth(base_stats[2]);
-//        defBar.setFill(Color.hsb(base_stats[2],1.0,1.0));
 
     }
 
