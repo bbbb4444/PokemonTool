@@ -1,5 +1,7 @@
 package com.example.pokemontool;
 
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,32 +33,24 @@ import java.util.regex.Pattern;
 public class MainController {
     @FXML
     Label nameLabel;
-
     @FXML
     Label evoLvlLabel;
-
     @FXML
     TextField pokemonSearchField;
-
     @FXML
     Button next;
-
     @FXML
     Button prev;
-
     @FXML
     VBox pokemonMovesetsVBox;
-
     @FXML
     ImageView pokemon_icon;
-
     @FXML
     Label hpVal, atkVal, defVal, spaVal, spdVal, speVal;
     @FXML
     Rectangle hpBar, atkBar, defBar, spaBar, spdBar, speBar;
     @FXML
     GridPane baseStatsGrid;
-
     @FXML
     Label moveVal, typeVal, categoryVal, ppVal, powerVal, accuracyVal, effectVal;
 
@@ -68,10 +62,22 @@ public class MainController {
 
     public void displayImage(String pokemon_name) {
         int index = Main.pokemon.indexOf(pokemon_name)+1;
-        String url = "https://pkmn.net/sprites/crystal/" + index + ".gif";
-        Image bulba = new Image(url);
-        System.out.println(url);
-        pokemon_icon.setImage(bulba);
+        Task<Image> imageTask = new Task<>() {
+            @Override
+                    protected Image call() {
+                String url = "https://pkmn.net/sprites/crystal/" + index + ".gif";
+                return new Image(url);
+            }
+        };
+
+        pokemon_icon.setImage(new Image(getClass().getResourceAsStream("/loading.gif")));
+
+        imageTask.stateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Worker.State.SUCCEEDED) {
+                pokemon_icon.setImage(imageTask.getValue());
+            }
+        });
+        new Thread(imageTask).start();
     }
 
 
@@ -153,11 +159,13 @@ public class MainController {
         }
     }
 
+
     List<String> physicalTypes = new ArrayList<>(
             Arrays.asList("Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel"));
     private boolean isPhysical (String move) {
         return (physicalTypes.contains(move));
     }
+
 
     public void displayMoveInfo (String pokemon_move) {
         for (String[] move : Main.moves) {

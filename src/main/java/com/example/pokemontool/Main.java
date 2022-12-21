@@ -7,10 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +23,8 @@ public class Main extends Application {
 
 
     public void initializeMoveInformation() throws IOException {
-        InputStream in = getClass().getResource("/move_data.txt").openStream();
+
+        InputStream in = getClass().getResourceAsStream("/move_data.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         for (int i=0; i<251;i++) {
             String[] line = reader.readLine().split("\t");
@@ -38,7 +36,7 @@ public class Main extends Application {
 
     //Initializes array of Pokemon names by reading the pokemon-lower.txt file
     public void initializePokemon() throws IOException {
-        InputStream in = getClass().getResource("/pokemon-lower.txt").openStream();
+        InputStream in = getClass().getResourceAsStream("/pokemon-lower.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         for (int i=0; i<251;i++) {
             String line = reader.readLine();
@@ -49,7 +47,7 @@ public class Main extends Application {
 
     //initializes moveset array by reading the movesets.txt file and adding each moveset as a list to the index of the Pokemon in the pokemonstats list.
     public void initializeMovesets() throws IOException {
-        InputStream in = getClass().getResource("/movesets.txt").openStream();
+        InputStream in = getClass().getResourceAsStream("/movesets.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         Pattern poke_name = Pattern.compile("(^.+)EvosAttacks:", Pattern.CASE_INSENSITIVE);
         for (int i=0; i<251;) {
