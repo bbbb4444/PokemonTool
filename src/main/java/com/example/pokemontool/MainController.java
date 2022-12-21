@@ -160,6 +160,7 @@ public class MainController {
     }
 
 
+
     List<String> physicalTypes = new ArrayList<>(
             Arrays.asList("Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel"));
     private boolean isPhysical (String move) {

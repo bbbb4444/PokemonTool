@@ -1,10 +1,12 @@
 package com.example.pokemontool;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -84,7 +86,7 @@ public class Main extends Application {
         Image icon = new Image(getClass().getResourceAsStream("/icon.png"));
         primaryStage.getIcons().add(icon);
         primaryStage.setTitle("Pokemon Nuzlocke Helper");
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
 
         primaryStage.setScene(scene);
         primaryStage.show();

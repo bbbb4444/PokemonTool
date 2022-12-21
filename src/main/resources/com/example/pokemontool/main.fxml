@@ -1,89 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="479.0" prefWidth="431.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pokemontool.MainController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="502.0" prefWidth="433.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pokemontool.MainController">
    <children>
-      <HBox layoutX="27.0" layoutY="49.0" spacing="6.0">
+      <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="383.0" spacing="10.0">
          <children>
-            <Button fx:id="prev" mnemonicParsing="false" onAction="#goToPrevPoke" text="Prev" />
-            <Button fx:id="next" mnemonicParsing="false" onAction="#goToNextPoke" text="Next" />
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+               <children>
+                  <TextField fx:id="pokemonSearchField" onAction="#changePokemonManually" prefHeight="25.0" prefWidth="107.0" promptText="Charmander" />
+                  <HBox alignment="CENTER" spacing="6.0">
+                     <children>
+                        <Button fx:id="prev" mnemonicParsing="false" onAction="#goToPrevPoke" text="Prev" />
+                        <Button fx:id="next" mnemonicParsing="false" onAction="#goToNextPoke" text="Next" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <StackPane maxHeight="-Infinity" prefHeight="66.0" prefWidth="66.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="66.0" stroke="#9e9e9e" strokeType="INSIDE" width="66.0" />
+                  <ImageView fx:id="pokemon_icon" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
+               </children>
+            </StackPane>
+            <Button mnemonicParsing="false" onAction="#switchToScene1" text="Main menu">
+               <HBox.margin>
+                  <Insets left="90.0" />
+               </HBox.margin>
+            </Button>
          </children>
       </HBox>
-      <Button layoutX="225.0" layoutY="17.0" mnemonicParsing="false" onAction="#switchToScene1" text="Main menu" />
-      <TextField fx:id="pokemonSearchField" layoutX="16.0" layoutY="14.0" onAction="#changePokemonManually" prefHeight="25.0" prefWidth="107.0" promptText="Charmander" />
-      <Label fx:id="evoLvlLabel" layoutX="15.0" layoutY="82.0" text="." textAlignment="RIGHT" />
-      <GridPane fx:id="baseStatsGrid" layoutX="16.0" layoutY="131.0" prefHeight="132.0" prefWidth="137.0">
-        <columnConstraints>
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="29.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="171.0" minWidth="10.0" prefWidth="25.0" />
-            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="90.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="431.0">
          <children>
-            <Label text="HP" />
-            <Label text="ATK" GridPane.rowIndex="1" />
-            <Label text="DEF" GridPane.rowIndex="2" />
-            <Label text="SPE" GridPane.rowIndex="3" />
-            <Label text="SPA" GridPane.rowIndex="4" />
-            <Label text="SPD" GridPane.rowIndex="5" />
-            <Label fx:id="hpVal" text="0" GridPane.columnIndex="1" />
-            <Label fx:id="atkVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="defVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="speVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="spaVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label fx:id="spdVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Rectangle fx:id="hpBar" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="16.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" />
-            <Rectangle fx:id="atkBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Rectangle fx:id="defBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="47.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Rectangle fx:id="speBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="77.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Rectangle fx:id="spaBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="107.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Rectangle fx:id="spdBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="107.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Label fx:id="evoLvlLabel" textAlignment="RIGHT" />
          </children>
-      </GridPane>
-      <ScrollPane layoutX="202.0" layoutY="121.0" prefHeight="200.0" prefWidth="200.0">
-         <content>
-            <VBox fx:id="pokemonMovesetsVBox" prefHeight="198.0" prefWidth="185.0" />
-         </content>
-      </ScrollPane>
-      <AnchorPane layoutX="133.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="64.0">
+      </HBox>
+      <HBox fillHeight="false" prefHeight="214.0" prefWidth="387.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="66.0" stroke="#9e9e9e" strokeType="INSIDE" width="66.0" />
-            <ImageView fx:id="pokemon_icon" fitHeight="64.0" fitWidth="64.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
+            <GridPane fx:id="baseStatsGrid" minHeight="115.0" minWidth="135.0" prefHeight="143.0" prefWidth="137.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="29.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="171.0" minWidth="10.0" prefWidth="25.0" />
+                  <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="90.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="HP" />
+                  <Label text="ATK" GridPane.rowIndex="1" />
+                  <Label text="DEF" GridPane.rowIndex="2" />
+                  <Label text="SPE" GridPane.rowIndex="3" />
+                  <Label text="SPA" GridPane.rowIndex="4" />
+                  <Label text="SPD" GridPane.rowIndex="5" />
+                  <Label fx:id="hpVal" text="0" GridPane.columnIndex="1" />
+                  <Label fx:id="atkVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="defVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="speVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label fx:id="spaVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label fx:id="spdVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Rectangle fx:id="hpBar" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="16.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" />
+                  <Rectangle fx:id="atkBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Rectangle fx:id="defBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="47.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Rectangle fx:id="speBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="77.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Rectangle fx:id="spaBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="107.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <Rectangle fx:id="spdBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="107.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+               </children>
+            </GridPane>
+            <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="229.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <ScrollPane maxHeight="-Infinity" prefHeight="200.0" prefWidth="190.0" VBox.vgrow="SOMETIMES">
+                     <content>
+                        <VBox fx:id="pokemonMovesetsVBox" prefHeight="198.0" prefWidth="185.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
          </children>
-      </AnchorPane>
-      <GridPane alignment="CENTER" layoutX="22.0" layoutY="326.0" prefHeight="132.0" prefWidth="387.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      </HBox>
+      <GridPane alignment="CENTER" maxWidth="-Infinity" prefHeight="114.0" prefWidth="387.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="75.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="43.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="78.0" minHeight="10.0" prefHeight="69.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="43.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="78.0" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
             <Label alignment="TOP_LEFT" text="Move" GridPane.halignment="CENTER" />
             <Label alignment="TOP_LEFT" text="Type" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
@@ -94,11 +119,13 @@
             <Label fx:id="moveVal" alignment="TOP_LEFT" text="--" textOverrun="CLIP" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <Label fx:id="typeVal" alignment="TOP_LEFT" text="--" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <Label fx:id="categoryVal" alignment="TOP_LEFT" text="--" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <Label fx:id="ppVal" alignment="TOP_LEFT" text="--" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Label fx:id="ppVal" alignment="TOP_LEFT" text="--" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <Label fx:id="powerVal" alignment="TOP_LEFT" text="--" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <Label fx:id="accuracyVal" alignment="TOP_LEFT" text="--" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <Label fx:id="effectVal" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.vgrow="SOMETIMES" />
-         </children>
+            </children>
       </GridPane>
    </children>
-</AnchorPane>
+   <padding>
+      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+   </padding>
+</VBox>
