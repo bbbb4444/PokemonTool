@@ -1,15 +1,16 @@
 package com.example.pokemontool;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main extends Application {
+    public static double windowHeight;
     static List<List<String>> pokemonstats = new ArrayList<>();
     static List<String> pokemon = new ArrayList<>();
     static String[][] moves = new String[251][];
@@ -86,10 +88,11 @@ public class Main extends Application {
         Image icon = new Image(getClass().getResourceAsStream("/icon.png"));
         primaryStage.getIcons().add(icon);
         primaryStage.setTitle("Pokemon Nuzlocke Helper");
-        primaryStage.setResizable(true);
+        primaryStage.setResizable(false);
 
         primaryStage.setScene(scene);
         primaryStage.show();
+        windowHeight = primaryStage.getHeight();
     }
 
 }

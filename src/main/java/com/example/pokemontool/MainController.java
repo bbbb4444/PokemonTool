@@ -4,7 +4,6 @@ import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -53,12 +52,25 @@ public class MainController {
     GridPane baseStatsGrid;
     @FXML
     Label moveVal, typeVal, categoryVal, ppVal, powerVal, accuracyVal, effectVal;
+    @FXML
+    GridPane moveDetailGrid;
+    @FXML
+    VBox mainVBox;
 
     private Stage stage;
     private Scene scene;
     private Parent root;
     String pokemon_name;
 
+    public void expandEffect() {
+        int amountOfCharacters = effectVal.getText().length();
+        int charactersPerLine = 55;
+        System.out.println(mainVBox.getScene().getWindow().getHeight());
+        System.out.println("Label size: " + effectVal.getHeight());
+        double windowHeight = Main.windowHeight;
+        double expandHeight = (effectVal.getFont().getSize()+2)*Math.ceilDiv(amountOfCharacters,charactersPerLine);
+        mainVBox.getScene().getWindow().setHeight(windowHeight+expandHeight);
+    }
 
     public void displayImage(String pokemon_name) {
         int index = Main.pokemon.indexOf(pokemon_name)+1;
@@ -97,13 +109,16 @@ public class MainController {
 
 
     //Switch back to main manu
-    public void switchToScene1(ActionEvent e) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("main.fxml"));
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
+//    public void switchToScene1(ActionEvent e) throws IOException {
+//        Main main = new Main();
+//        Stage stage = new Stage();
+//        main.expandStage(stage);
+////        root = FXMLLoader.load(getClass().getResource("main.fxml"));
+////        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+////        scene = new Scene(root);
+////        stage.setScene(scene);
+////        stage.show();
+//    }
 
 
     //Update pokemon_name variable when Pokemon name is entered
@@ -185,6 +200,7 @@ public class MainController {
                 powerVal.setText(move[3]);
                 accuracyVal.setText(move[4]);
                 effectVal.setText(move[5]);
+                expandEffect();
             }
         }
     }
