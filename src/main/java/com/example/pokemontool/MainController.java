@@ -62,16 +62,24 @@ public class MainController {
     private Parent root;
     String pokemon_name;
 
+
+    public void newInstance(ActionEvent e) throws Exception {
+        Main main = new Main();
+        Stage PrimaryStage = new Stage();
+        main.start(PrimaryStage);
+    }
+
+
+    //automatically expands the window to accommodate lengthy attack effects
     public void expandEffect() {
         int amountOfCharacters = effectVal.getText().length();
         int charactersPerLine = 55;
-        System.out.println(mainVBox.getScene().getWindow().getHeight());
-        System.out.println("Label size: " + effectVal.getHeight());
         double windowHeight = Main.windowHeight;
         double expandHeight = (effectVal.getFont().getSize()+2)*Math.ceilDiv(amountOfCharacters,charactersPerLine);
         mainVBox.getScene().getWindow().setHeight(windowHeight+expandHeight);
     }
 
+    //grabs pokemon icon from pkmn.net and displays it
     public void displayImage(String pokemon_name) {
         int index = Main.pokemon.indexOf(pokemon_name)+1;
         Task<Image> imageTask = new Task<>() {
@@ -81,7 +89,6 @@ public class MainController {
                 return new Image(url);
             }
         };
-
         pokemon_icon.setImage(new Image(getClass().getResourceAsStream("/loading.gif")));
 
         imageTask.stateProperty().addListener((observable, oldValue, newValue) -> {
