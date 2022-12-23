@@ -14,14 +14,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<VBox fx:id="mainVBox" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pokemontool.MainController">
+<VBox fx:id="mainVBox" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pokemontool.MainController">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="383.0" spacing="10.0">
          <children>
             <StackPane maxHeight="-Infinity" prefHeight="66.0" prefWidth="66.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="66.0" stroke="#9e9e9e" strokeType="INSIDE" width="66.0" />
-                  <ImageView fx:id="pokemon_icon" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
+                  <ImageView fx:id="pokemon_icon" pickOnBounds="true" preserveRatio="true" smooth="false" />
                </children>
             </StackPane>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
@@ -35,6 +35,7 @@
                   </HBox>
                </children>
             </VBox>
+            <Button mnemonicParsing="false" onAction="#setSize" text="Button" />
             <Button mnemonicParsing="false" onAction="#newInstance" text="Compare">
                <HBox.margin>
                   <Insets left="90.0" />
@@ -42,11 +43,7 @@
             </Button>
          </children>
       </HBox>
-      <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="431.0">
-         <children>
-            <Label fx:id="evoLvlLabel" textAlignment="RIGHT" />
-         </children>
-      </HBox>
+      <VBox fx:id="evoVBox" prefHeight="24.0" prefWidth="100.0" />
       <HBox fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="214.0" prefWidth="387.0">
          <children>
             <GridPane fx:id="baseStatsGrid" minHeight="115.0" minWidth="135.0" prefHeight="143.0" prefWidth="137.0">
@@ -67,9 +64,9 @@
                   <Label text="HP" />
                   <Label text="ATK" GridPane.rowIndex="1" />
                   <Label text="DEF" GridPane.rowIndex="2" />
-                  <Label text="SPE" GridPane.rowIndex="3" />
-                  <Label text="SPA" GridPane.rowIndex="4" />
-                  <Label text="SPD" GridPane.rowIndex="5" />
+                  <Label text="SPA" GridPane.rowIndex="3" />
+                  <Label text="SPD" GridPane.rowIndex="4" />
+                  <Label text="SPE" GridPane.rowIndex="5" />
                   <Label fx:id="hpVal" text="0" GridPane.columnIndex="1" />
                   <Label fx:id="atkVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label fx:id="defVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />

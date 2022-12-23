@@ -14,21 +14,24 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+
 
 public class Main extends Application {
+
+
+
     public static double windowHeight;
-    static List<List<String>> pokemonstats = new ArrayList<>();
+    static List<List<String>> pokemonStats = new ArrayList<>();
     static List<String> pokemon = new ArrayList<>();
     static String[][] moves = new String[251][];
-
+    static String[][] baseStats = new String[251][];
     public static void main(String[] args) {launch(args);}
 
 
     public void initializeMoveInformation() throws IOException {
 
-        InputStream in = getClass().getResourceAsStream("/move_data.txt");
+        InputStream in = getClass().getResourceAsStream("/move_data.tsv");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         for (int i=0; i<251;i++) {
             String[] line = reader.readLine().split("\t");
@@ -38,39 +41,35 @@ public class Main extends Application {
     }
 
 
-    //Initializes array of Pokemon names by reading the pokemon-lower.txt file
+    //Initializes array of Pokemon names by reading the pokemon.txt file
     public void initializePokemon() throws IOException {
-        InputStream in = getClass().getResourceAsStream("/pokemon-lower.txt");
+        InputStream in = getClass().getResourceAsStream("/pokemon.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         for (int i=0; i<251;i++) {
-            String line = reader.readLine();
+            String line = reader.readLine().toLowerCase();
             pokemon.add(line);
         }
+        System.out.println(pokemon);
     }
 
+    public void initializeBaseStats() throws IOException {
+        InputStream in = getClass().getResourceAsStream("/basestats.csv");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        for (int i = 0; i < 251; i++)
+            baseStats[i] = reader.readLine().split(",");
+    }
 
     //initializes moveset array by reading the movesets.txt file and adding each moveset as a list to the index of the Pokemon in the pokemonstats list.
     public void initializeMovesets() throws IOException {
-        InputStream in = getClass().getResourceAsStream("/movesets.txt");
+        InputStream in = getClass().getResourceAsStream("/movesets.tsv");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        Pattern poke_name = Pattern.compile("(^.+)EvosAttacks:", Pattern.CASE_INSENSITIVE);
-        for (int i=0; i<251;) {
-            List<String> moves = new ArrayList<>();
-            String line = reader.readLine();
-            if (line == null) {
-                break;
-            }
-            Matcher matcher = poke_name.matcher(line);
-            if (matcher.find()) {
-                while (!line.equals("")) {
-                    moves.add(line);
-                    line = reader.readLine();
-                }
-                pokemonstats.add(moves);
-                i++;
-            }
-
+        for (int i=0; i<251; i++) {
+            List<String> moves;
+            String line = reader.readLine().trim();
+            moves = List.of(line.split("\t"));
+            pokemonStats.add(moves);
         }
+        System.out.println(pokemonStats);
     }
 
 
@@ -79,6 +78,9 @@ public class Main extends Application {
         initializePokemon();
         initializeMovesets();
         initializeMoveInformation();
+        initializeBaseStats();
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+//        loader.setControllerFactory(controllerClass -> new MainController());
 
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         Scene scene = new Scene(root);
