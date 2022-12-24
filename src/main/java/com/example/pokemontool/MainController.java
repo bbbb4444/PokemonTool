@@ -2,7 +2,6 @@ package com.example.pokemontool;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -17,7 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +34,7 @@ public class MainController {
     @FXML
     VBox pokemonMovesetsVBox;
     @FXML
-    ImageView pokemon_icon;
+    ImageView pokemonIcon;
     @FXML
     Label hpVal, atkVal, defVal, spaVal, spdVal, speVal;
     @FXML
@@ -55,7 +53,7 @@ public class MainController {
     String pokemonName;
 
     //loads Charmander when program is first loaded
-    public void initialize() throws IOException {
+    public void initialize() {
         pokemonName = "Charmander";
         changePokemon();
     }
@@ -68,44 +66,6 @@ public class MainController {
     }
 
 
-    private void changePokemon() {
-        pokemonName = pokemonName.toLowerCase();
-        int pokemonIndex = indexOf(pokemonName);
-        populateStatsArea(pokemonIndex);
-        displayImage(pokemonName);
-        displayMoveset(pokemonIndex);
-        displayEvolutionInfo(pokemonIndex);
-    }
-
-    //automatically expands the window to accommodate added content
-    public void fixWindowSize() {
-        mainVBox.getScene().getWindow().sizeToScene();
-    }
-
-    //grabs pokemon icon from pkmn.net and displays it
-    public void displayImage(String pokeName) {
-        int index = Main.pokemon.indexOf(pokeName)+1;
-        Task<Image> imageTask = new Task<>() {
-            @Override
-            protected Image call() {
-                String url = "https://pkmn.net/sprites/crystal/" + index + ".gif";
-                return new Image(url);
-            }
-        };
-        pokemon_icon.setImage(new Image(getClass().getResourceAsStream("/loading.gif")));
-        pokemon_icon.setFitWidth(64);
-        pokemon_icon.setFitHeight(64);
-
-        imageTask.stateProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == Worker.State.SUCCEEDED) {
-                pokemon_icon.setImage(imageTask.getValue());
-                pokemon_icon.setFitWidth(0);
-                pokemon_icon.setFitHeight(0);
-            }
-        });
-        new Thread(imageTask).start();
-    }
-
 
     public void goToNextPoke() {
         pokemonName = Main.pokemon.get(Main.pokemon.indexOf(pokemonName)+1);
@@ -116,7 +76,6 @@ public class MainController {
         changePokemon();
     }
 
-
     //Update pokemon_name variable when Pokemon name is entered
     public void changePokemonManually() {
         pokemonName = pokemonSearchField.getText().toLowerCase();
@@ -124,19 +83,43 @@ public class MainController {
     }
 
 
-
-
-
-
-    List<String> physicalTypes = new ArrayList<>(
-            Arrays.asList("Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel"));
-    private boolean isPhysical (String category) {
-        return (physicalTypes.contains(category));
+    //calls all the necessary methods to update the Pokemon
+    private void changePokemon() {
+        pokemonName = pokemonName.toLowerCase();
+        int pokemonIndex = indexOf(pokemonName);
+        populateStatsArea(pokemonIndex);
+        displayImage(pokemonName);
+        displayMoveset(pokemonIndex);
+        displayEvolutionInfo(pokemonIndex);
     }
 
-    public void displayMoveInfo (String pokemon_move) {
+    //grabs pokemon icon from pkmn.net and displays it
+    private void displayImage(String pokeName) {
+        int index = Main.pokemon.indexOf(pokeName)+1;
+        Task<Image> imageTask = new Task<>() {
+            @Override
+            protected Image call() {
+                String url = "https://pkmn.net/sprites/crystal/" + index + ".gif";
+                return new Image(url);
+            }
+        };
+        pokemonIcon.setImage(new Image(getClass().getResourceAsStream("/loading.gif")));
+        pokemonIcon.setFitWidth(64);
+        pokemonIcon.setFitHeight(64);
+
+        imageTask.stateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Worker.State.SUCCEEDED) {
+                pokemonIcon.setImage(imageTask.getValue());
+                pokemonIcon.setFitWidth(0);
+                pokemonIcon.setFitHeight(0);
+            }
+        });
+        new Thread(imageTask).start();
+    }
+
+    private void displayMoveInfo(String pokemonMove) {
         for (String[] move : Main.moves) {
-            if (move[0].equalsIgnoreCase(pokemon_move)) {
+            if (move[0].equalsIgnoreCase(pokemonMove)) {
                 moveVal.setText(move[0]);
                 typeVal.setText(move[1]);
                 ppVal.setText(move[2]);
@@ -156,38 +139,12 @@ public class MainController {
         }
     }
 
-
-    //Given a Pokemon name, return the index of that Pokemon to be used for methods that require it
-    public int indexOf(String pokeName) {
-        System.out.println(pokeName);
-        Pattern pokeNamePattern = Pattern.compile(pokeName, Pattern.CASE_INSENSITIVE);
-        Matcher matcher;
-
-        for (int indexOfPoke = 0; indexOfPoke<Main.pokemonStats.size();indexOfPoke++)
-        {
-            matcher = pokeNamePattern.matcher(Main.pokemonStats.get(indexOfPoke).get(0));
-            if (matcher.find()) {
-                return indexOfPoke;
-            }
-        }
-        System.out.println("Pokemon not found");
-        return 1;
-    }
-
-    public void setSize() {
-        System.out.println(mainVBox.getScene().getHeight());
-        System.out.println(mainVBox.getScene().getWindow().getHeight());
-        mainVBox.getScene().getWindow().sizeToScene();
-    }
-
     //given the index of a Pokemon, display its evolution information
-    public void displayEvolutionInfo(int pokeIndex) {
+    private void displayEvolutionInfo(int pokeIndex) {
         evoVBox.getChildren().clear();
-        Pattern evolution_level = Pattern.compile(".+~([0-9]+)~([a-zA-Z]+)");
-        Matcher matcher;
 
         int evoDataIndex = 1;
-        String evo_data = Main.pokemonStats.get(pokeIndex).get(evoDataIndex).trim();
+        String evo_data = Main.pokemonEvosAndMovesets.get(pokeIndex).get(evoDataIndex).trim();
         if (evo_data.equals("db 0 ; no more evolutions")) {
             Label evol = new Label("Does not evolve");
             evoVBox.getChildren().add(evol);
@@ -210,7 +167,7 @@ public class MainController {
                     evoVBox.getChildren().add(evol);
                 }
                 evoDataIndex++;
-                evo_data = Main.pokemonStats.get(pokeIndex).get(evoDataIndex).trim();
+                evo_data = Main.pokemonEvosAndMovesets.get(pokeIndex).get(evoDataIndex).trim();
             }
             try {
                 evoVBox.getScene().getWindow().sizeToScene();
@@ -223,25 +180,28 @@ public class MainController {
     //given the index of a Pokemon, display its moveset
     private void displayMoveset(int poke) {
         pokemonMovesetsVBox.getChildren().clear();
-        for (int move_i = 3; move_i<Main.pokemonStats.get(poke).size()-1; move_i++)
+        for (int moveIndex = 3; moveIndex<Main.pokemonEvosAndMovesets.get(poke).size()-1; moveIndex++)
         {
-            String pokemon_move = Main.pokemonStats.get(poke).get(move_i).trim();
-            pokemon_move = pokemon_move.replaceAll("db ","").replaceAll("~", "\t").replaceAll("_"," ");
-            System.out.println(pokemon_move);
-            Button move = new Button(pokemon_move);
+            String pokemonMove = Main.pokemonEvosAndMovesets.get(poke).get(moveIndex).trim();
+            while (pokemonMove.startsWith("db E") || pokemonMove.startsWith("db 0")) {
+                moveIndex++;
+                pokemonMove = Main.pokemonEvosAndMovesets.get(poke).get(moveIndex).trim();
+                System.out.println(pokemonMove);
+            }
+            pokemonMove = pokemonMove.replaceAll("db ","").replaceAll("~", "\t").replaceAll("_"," ");
+            System.out.println(pokemonMove);
+            Button move = new Button(pokemonMove);
             move.setPadding(new Insets(1,4,1,4));
 
-            String finalPokemon_move = pokemon_move.replaceAll("[0-9].","").trim();
-            move.setOnAction(e -> displayMoveInfo(finalPokemon_move));
+            String finalPokemonMove = pokemonMove.replaceAll("[0-9].","").trim();
+            move.setOnAction(e -> displayMoveInfo(finalPokemonMove));
 
             pokemonMovesetsVBox.getChildren().add(move);
         }
     }
 
-
-
     //Populates Pokemon basestats area
-    public void populateStatsArea(int pokeIndex) {
+    private void populateStatsArea(int pokeIndex) {
         String[][] baseStats = Main.baseStats;
         int stat_index = 1;
         int bar_index = 1;
@@ -262,4 +222,35 @@ public class MainController {
             }
         }
     }
+
+
+    //expands the window to accommodate added content (move effect description and evolution information)
+    private void fixWindowSize() {
+        mainVBox.getScene().getWindow().sizeToScene();
+    }
+
+
+    private boolean isPhysical (String category) {
+        List<String> physicalTypes = new ArrayList<>(
+                Arrays.asList("Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel"));
+        return (physicalTypes.contains(category));
+    }
+
+    //Given a Pokemon name, return the index of that Pokemon to be used for methods that require it
+    private int indexOf(String pokeName) {
+        System.out.println(pokeName);
+        Pattern pokeNamePattern = Pattern.compile(pokeName, Pattern.CASE_INSENSITIVE);
+        Matcher matcher;
+
+        for (int indexOfPoke = 0; indexOfPoke<Main.pokemonEvosAndMovesets.size(); indexOfPoke++)
+        {
+            matcher = pokeNamePattern.matcher(Main.pokemonEvosAndMovesets.get(indexOfPoke).get(0));
+            if (matcher.find()) {
+                return indexOfPoke;
+            }
+        }
+        System.out.println("Pokemon not found");
+        return 1;
+    }
+
 }

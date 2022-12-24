@@ -19,19 +19,16 @@ import java.util.List;
 
 public class Main extends Application {
 
-
-
     public static double windowHeight;
-    static List<List<String>> pokemonStats = new ArrayList<>();
+    static List<List<String>> pokemonEvosAndMovesets = new ArrayList<>();
     static List<String> pokemon = new ArrayList<>();
     static String[][] moves = new String[251][];
     static String[][] baseStats = new String[251][];
     public static void main(String[] args) {launch(args);}
 
 
-    public void initializeMoveInformation() throws IOException {
-
-        InputStream in = getClass().getResourceAsStream("/move_data.tsv");
+    private void initializeMoveInformation() throws IOException {
+        InputStream in = getClass().getResourceAsStream("/moveData.tsv");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         for (int i=0; i<251;i++) {
             String[] line = reader.readLine().split("\t");
@@ -40,9 +37,8 @@ public class Main extends Application {
         System.out.println(Arrays.deepToString(moves));
     }
 
-
     //Initializes array of Pokemon names by reading the pokemon.txt file
-    public void initializePokemon() throws IOException {
+    private void initializePokemon() throws IOException {
         InputStream in = getClass().getResourceAsStream("/pokemon.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         for (int i=0; i<251;i++) {
@@ -52,7 +48,8 @@ public class Main extends Application {
         System.out.println(pokemon);
     }
 
-    public void initializeBaseStats() throws IOException {
+    //Initializes array of
+    private void initializeBaseStats() throws IOException {
         InputStream in = getClass().getResourceAsStream("/basestats.csv");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         for (int i = 0; i < 251; i++)
@@ -60,16 +57,16 @@ public class Main extends Application {
     }
 
     //initializes moveset array by reading the movesets.txt file and adding each moveset as a list to the index of the Pokemon in the pokemonstats list.
-    public void initializeMovesets() throws IOException {
+    private void initializeMovesets() throws IOException {
         InputStream in = getClass().getResourceAsStream("/movesets.tsv");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         for (int i=0; i<251; i++) {
             List<String> moves;
             String line = reader.readLine().trim();
             moves = List.of(line.split("\t"));
-            pokemonStats.add(moves);
+            pokemonEvosAndMovesets.add(moves);
         }
-        System.out.println(pokemonStats);
+        System.out.println(pokemonEvosAndMovesets);
     }
 
 
