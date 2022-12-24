@@ -42,7 +42,10 @@
             </Button>
          </children>
       </HBox>
-      <VBox fx:id="evoVBox" prefHeight="24.0" prefWidth="100.0" />
+      <VBox fx:id="evoVBox" alignment="CENTER_LEFT" minWidth="24.0" prefHeight="16.0" prefWidth="100.0" spacing="2.0">
+         <padding>
+            <Insets bottom="2.0" top="2.0" />
+         </padding></VBox>
       <HBox fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="214.0" prefWidth="387.0">
          <children>
             <GridPane fx:id="baseStatsGrid" minHeight="115.0" minWidth="135.0" prefHeight="143.0" prefWidth="137.0">

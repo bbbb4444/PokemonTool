@@ -34,7 +34,6 @@ public class Main extends Application {
             String[] line = reader.readLine().split("\t");
             moves[i] = line;
         }
-        System.out.println(Arrays.deepToString(moves));
     }
 
     //Initializes array of Pokemon names by reading the pokemon.txt file
@@ -45,7 +44,6 @@ public class Main extends Application {
             String line = reader.readLine().toLowerCase();
             pokemon.add(line);
         }
-        System.out.println(pokemon);
     }
 
     //Initializes array of
@@ -54,6 +52,7 @@ public class Main extends Application {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         for (int i = 0; i < 251; i++)
             baseStats[i] = reader.readLine().split(",");
+        System.out.println(Arrays.deepToString(baseStats));
     }
 
     //initializes moveset array by reading the movesets.txt file and adding each moveset as a list to the index of the Pokemon in the pokemonstats list.
@@ -66,7 +65,6 @@ public class Main extends Application {
             moves = List.of(line.split("\t"));
             pokemonEvosAndMovesets.add(moves);
         }
-        System.out.println(pokemonEvosAndMovesets);
     }
 
 
@@ -81,8 +79,8 @@ public class Main extends Application {
 
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         Scene scene = new Scene(root);
-        //String css = this.getClass().getResource("styles.css").toExternalForm();
-        //scene.getStylesheets().add(css);
+        String css = this.getClass().getResource("/styles.css").toExternalForm();
+        scene.getStylesheets().add(css);
 
         Image icon = new Image(getClass().getResourceAsStream("/icon.png"));
         primaryStage.getIcons().add(icon);

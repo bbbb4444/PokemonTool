@@ -1,0 +1,12 @@
+.move-button {
+    -fx-background-color: none;
+}
+.move-button:hover {
+    /*-fx-background-color: #d6d6d6;*/
+    -fx-background-color: #FFFFFF;
+}
+
+.level-entry {
+    -fx-padding: 0 -8 0 4;
+
+}
