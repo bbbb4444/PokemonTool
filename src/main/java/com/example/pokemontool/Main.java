@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -24,6 +25,10 @@ public class Main extends Application {
     static List<String> pokemon = new ArrayList<>();
     static String[][] moves = new String[251][];
     static String[][] baseStats = new String[251][];
+    private final String[] types = {
+            "Normal","Fighting","Flying","Poison","Ground","Rock","Bug","Ghost","Steel",
+            "Fire", "Water","Grass","Electric","Psychic","Ice","Dragon","Dark"};
+    static Label[] typeLabels = new Label[17];
     public static void main(String[] args) {launch(args);}
 
 
@@ -46,13 +51,23 @@ public class Main extends Application {
         }
     }
 
-    //Initializes array of
+    //Initializes array of basestats
     private void initializeBaseStats() throws IOException {
         InputStream in = getClass().getResourceAsStream("/basestats.csv");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         for (int i = 0; i < 251; i++)
             baseStats[i] = reader.readLine().split(",");
         System.out.println(Arrays.deepToString(baseStats));
+    }
+
+    private void typeToLabels() {
+        int index = 0;
+        for (String type : types) {
+            Label typeLabel = new Label(type);
+            //typeLabel.getStyleClass().add();
+            typeLabels[index] = typeLabel;
+            index++;
+        }
     }
 
     //initializes moveset array by reading the movesets.txt file and adding each moveset as a list to the index of the Pokemon in the pokemonstats list.
@@ -66,7 +81,6 @@ public class Main extends Application {
             pokemonEvosAndMovesets.add(moves);
         }
     }
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {
