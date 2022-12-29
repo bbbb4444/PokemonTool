@@ -18,6 +18,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class MainController {
     @FXML
     Label evoLvlLabel;
@@ -85,7 +87,7 @@ public class MainController {
         int pokemonIndex = pokemon.getPokemonIndex();
         populateStatsArea(pokemonIndex);
         displayImage(pokemonIndex);
-        displayMoveset(pokemonIndex);
+        displayMoveset();
         displayEvolutionInfo(pokemonIndex);
     }
 
@@ -173,20 +175,13 @@ public class MainController {
     }
 
     //given the index of a Pokemon, display its moveset
-    private void displayMoveset(int pokeIndex) {
+    private void displayMoveset() {
         pokemonMovesetsVBox.getChildren().clear();
-        for (int moveIndex = 3; moveIndex<Main.pokemonEvosAndMovesets.get(pokeIndex).size()-1; moveIndex++)
-        {
-            String pokemonMove = Main.pokemonEvosAndMovesets.get(pokeIndex).get(moveIndex).trim();
-            while (pokemonMove.startsWith("db E") || pokemonMove.startsWith("db 0")) {
-                moveIndex++;
-                pokemonMove = Main.pokemonEvosAndMovesets.get(pokeIndex).get(moveIndex).trim();
-            }
-            pokemonMove = pokemonMove.replaceAll("db ","").replaceAll("_"," ");
-            String[] pokemonMoveArray = pokemonMove.split("~");
-            String level = pokemonMoveArray[0]+"\t";
-            String move = toTitleCase(pokemonMoveArray[1]);
-            HBox entry = populateEntry(level, move);
+        ArrayList<String[]> moveset = myPokemon.getMoveset();
+        for (String[] moveInfo : moveset) {
+            String moveLevel = moveInfo[0];
+            String moveName = moveInfo[1];
+            HBox entry = populateEntry(moveLevel, moveName);
             pokemonMovesetsVBox.getChildren().add(entry);
         }
     }
@@ -224,6 +219,9 @@ public class MainController {
 
     private HBox populateEntry(String level, String move) {
         HBox entry = new HBox();
+        level = level.concat("\t");
+        move = toTitleCase(move);
+
         Label levelLabel = new Label(level);
         Button moveButton = new Button(move);
         levelLabel.getStyleClass().add("level-entry");
@@ -231,7 +229,9 @@ public class MainController {
         entry.getChildren().addAll(levelLabel,moveButton);
         moveButton.setPadding(new Insets(1,4,1,4));
         moveButton.getStyleClass().add("move-button");
-        moveButton.setOnAction(e -> displayMoveInfo(move));
+
+        String finalMove = move;
+        moveButton.setOnAction(e -> displayMoveInfo(finalMove));
         return entry;
     }
 
