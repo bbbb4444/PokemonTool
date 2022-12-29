@@ -212,7 +212,7 @@ public class MainController {
 
     //Helper functions
 
-    //expands the window to accommodate added content (move effect description and evolution information)
+    //Expands the window to accommodate added content (move effect description and evolution information)
     private void fixWindowSize() {
         mainVBox.getScene().getWindow().sizeToScene();
     }
