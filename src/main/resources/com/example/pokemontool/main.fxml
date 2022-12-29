@@ -97,6 +97,7 @@
             <Insets bottom="8.0" />
          </VBox.margin>
       </HBox>
+      <Label styleClass="type" text="Label" />
       <GridPane fx:id="moveDetailGrid" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefWidth="383.0" VBox.vgrow="ALWAYS">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />

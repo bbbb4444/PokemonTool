@@ -10,3 +10,10 @@
     -fx-padding: 0 -8 0 4;
 
 }
+
+.type {
+    -fx-background: #d6d6d6;
+    -fx-border-style: solid;
+    -fx-padding: 4px 8px;
+    -fx-border-radius: 16px;
+}

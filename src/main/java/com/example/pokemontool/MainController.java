@@ -18,10 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class MainController {
     @FXML
     Label evoLvlLabel;
@@ -50,12 +46,12 @@ public class MainController {
     @FXML
     VBox evoVBox;
 
-    String pokemonName;
+    Pokemon myPokemon = new Pokemon();
 
     //loads Charmander when program is first loaded
     public void initialize() {
-        pokemonName = "Charmander";
-        changePokemon();
+        myPokemon.changePokemon("Charmander");
+        updateGUI(myPokemon);
     }
 
     //opens a new instance of the program for the use of comparing Pokemon
@@ -68,38 +64,37 @@ public class MainController {
 
 
     public void goToNextPoke() {
-        pokemonName = Main.pokemon.get(Main.pokemon.indexOf(pokemonName)+1);
-        changePokemon();
+        myPokemon.incrementPokemon(1);
+        updateGUI(myPokemon);
     }
     public void goToPrevPoke() {
-        pokemonName = Main.pokemon.get(Main.pokemon.indexOf(pokemonName)-1);
-        changePokemon();
+        myPokemon.incrementPokemon(-1);
+        updateGUI(myPokemon);
     }
 
     //Update pokemon_name variable when Pokemon name is entered
     public void changePokemonManually() {
-        pokemonName = pokemonSearchField.getText().toLowerCase();
-        changePokemon();
+        String newPokeName = pokemonSearchField.getText().toLowerCase();
+        myPokemon.changePokemon(newPokeName);
+        updateGUI(myPokemon);
     }
 
 
-    //calls all the necessary methods to update the Pokemon
-    private void changePokemon() {
-        pokemonName = pokemonName.toLowerCase();
-        int pokemonIndex = indexOf(pokemonName);
+    //calls all the necessary methods to update the GUI for the provided Pokemon
+    private void updateGUI(Pokemon pokemon) {
+        int pokemonIndex = pokemon.getPokemonIndex();
         populateStatsArea(pokemonIndex);
-        displayImage(pokemonName);
+        displayImage(pokemonIndex);
         displayMoveset(pokemonIndex);
         displayEvolutionInfo(pokemonIndex);
     }
 
     //grabs pokemon icon from pkmn.net and displays it
-    private void displayImage(String pokeName) {
-        int index = Main.pokemon.indexOf(pokeName)+1;
+    private void displayImage(int pokeIndex) {
         Task<Image> imageTask = new Task<>() {
             @Override
             protected Image call() {
-                String url = "https://pkmn.net/sprites/crystal/" + index + ".gif";
+                String url = "https://pkmn.net/sprites/crystal/" + (pokeIndex+1) + ".gif";
                 return new Image(url);
             }
         };
@@ -129,12 +124,13 @@ public class MainController {
 
                 if (move[3].equals("N/A"))
                     categoryVal.setText("Status");
-                else if (isPhysical(move[1]))
+                else if (myPokemon.isPhysical(move[1]))
                     categoryVal.setText("Physical");
                 else
                     categoryVal.setText("Special");
 
                 fixWindowSize();
+                break;
             }
         }
     }
@@ -144,29 +140,29 @@ public class MainController {
         evoVBox.getChildren().clear();
 
         int evoDataIndex = 1;
-        String evo_data = Main.pokemonEvosAndMovesets.get(pokeIndex).get(evoDataIndex).trim();
-        if (evo_data.equals("db 0 ; no more evolutions")) {
-            Label evol = new Label("Does not evolve");
-            evoVBox.getChildren().add(evol);
+        String evoDataLine = Main.pokemonEvosAndMovesets.get(pokeIndex).get(evoDataIndex).trim();
+        if (evoDataLine.equals("db 0 ; no more evolutions")) {
+            Label evoLabel = new Label("Does not evolve");
+            evoVBox.getChildren().add(evoLabel);
         }
         else {
-            while (!evo_data.equals("db 0 ; no more evolutions")) {
-                String[] evo_item_data = evo_data.split("~");
-                for (int i = 0; i<evo_item_data.length;i++) {
-                    evo_item_data[i] = toTitleCase(evo_item_data[i]);
+            while (!evoDataLine.equals("db 0 ; no more evolutions")) {
+                String[] evoData = evoDataLine.split("~");
+                for (int i = 0; i<evoData.length;i++) {
+                    evoData[i] = toTitleCase(evoData[i]);
                 }
-                if (evo_data.startsWith("db EVOLVE ITEM")) {
-                    Label evol = new Label("Evolves into " + evo_item_data[2] + " with " + evo_item_data[1]);
-                    evoVBox.getChildren().add(evol);
-                } else if (evo_data.startsWith("db EVOLVE HAPPINESS")) {
-                    Label evol = new Label("Evolves into " + evo_item_data[2] + " with high friendship");
-                    evoVBox.getChildren().add(evol);
-                } else if (evo_data.startsWith("db EVOLVE LEVEL")) {
-                    Label evol = new Label("Evolves into " + evo_item_data[2] + " starting at level " + evo_item_data[1]);
-                    evoVBox.getChildren().add(evol);
+                if (evoDataLine.startsWith("db EVOLVE ITEM")) {
+                    Label evoLabel = new Label("Evolves into " + evoData[2] + " with " + evoData[1]);
+                    evoVBox.getChildren().add(evoLabel);
+                } else if (evoDataLine.startsWith("db EVOLVE HAPPINESS")) {
+                    Label evoLabel = new Label("Evolves into " + evoData[2] + " with high friendship");
+                    evoVBox.getChildren().add(evoLabel);
+                } else if (evoDataLine.startsWith("db EVOLVE LEVEL")) {
+                    Label evoLabel = new Label("Evolves into " + evoData[2] + " starting at level " + evoData[1]);
+                    evoVBox.getChildren().add(evoLabel);
                 }
                 evoDataIndex++;
-                evo_data = Main.pokemonEvosAndMovesets.get(pokeIndex).get(evoDataIndex).trim();
+                evoDataLine = Main.pokemonEvosAndMovesets.get(pokeIndex).get(evoDataIndex).trim();
             }
             try {
                 evoVBox.getScene().getWindow().sizeToScene();
@@ -177,14 +173,14 @@ public class MainController {
     }
 
     //given the index of a Pokemon, display its moveset
-    private void displayMoveset(int poke) {
+    private void displayMoveset(int pokeIndex) {
         pokemonMovesetsVBox.getChildren().clear();
-        for (int moveIndex = 3; moveIndex<Main.pokemonEvosAndMovesets.get(poke).size()-1; moveIndex++)
+        for (int moveIndex = 3; moveIndex<Main.pokemonEvosAndMovesets.get(pokeIndex).size()-1; moveIndex++)
         {
-            String pokemonMove = Main.pokemonEvosAndMovesets.get(poke).get(moveIndex).trim();
+            String pokemonMove = Main.pokemonEvosAndMovesets.get(pokeIndex).get(moveIndex).trim();
             while (pokemonMove.startsWith("db E") || pokemonMove.startsWith("db 0")) {
                 moveIndex++;
-                pokemonMove = Main.pokemonEvosAndMovesets.get(poke).get(moveIndex).trim();
+                pokemonMove = Main.pokemonEvosAndMovesets.get(pokeIndex).get(moveIndex).trim();
             }
             pokemonMove = pokemonMove.replaceAll("db ","").replaceAll("_"," ");
             String[] pokemonMoveArray = pokemonMove.split("~");
@@ -217,13 +213,15 @@ public class MainController {
         }
     }
 
+
+
+    //Helper functions
+
     //expands the window to accommodate added content (move effect description and evolution information)
     private void fixWindowSize() {
         mainVBox.getScene().getWindow().sizeToScene();
     }
 
-
-    //Helper functions
     private HBox populateEntry(String level, String move) {
         HBox entry = new HBox();
         Label levelLabel = new Label(level);
@@ -251,22 +249,4 @@ public class MainController {
         }
         return builder.toString();
     }
-
-    private boolean isPhysical (String category) {
-        List<String> physicalTypes = new ArrayList<>(
-                Arrays.asList("Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel"));
-        return (physicalTypes.contains(category));
-    }
-
-    //Given a Pokemon name, return the index of that Pokemon to be used for methods that require it
-    private int indexOf(String pokeName) {
-        for (int indexOfPoke = 0; indexOfPoke<Main.pokemonEvosAndMovesets.size(); indexOfPoke++)
-        {
-            if (pokeName.equalsIgnoreCase(Main.pokemonEvosAndMovesets.get(indexOfPoke).get(0)))
-                return indexOfPoke;
-            }
-        System.out.println("Pokemon not found");
-        return 1;
-    }
-
 }
