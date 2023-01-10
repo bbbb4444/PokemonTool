@@ -32,12 +32,17 @@ public class Main extends Application {
     public static void main(String[] args) {launch(args);}
 
 
+
     private void initializeMoveInformation() throws IOException {
-        InputStream in = getClass().getResourceAsStream("/moveData.tsv");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        for (int i=0; i<251;i++) {
-            String[] line = reader.readLine().split("\t");
-            moves[i] = line;
+        try {
+            InputStream in = getClass().getResourceAsStream("/moveData.tsv");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            for (int i=0; i<251;i++) {
+                String[] line = reader.readLine().split("\t");
+                moves[i] = line;
+            }
+        } catch (NullPointerException e) {
+            throw new RuntimeException("moveData.tsv not present");
         }
     }
 
@@ -53,11 +58,15 @@ public class Main extends Application {
 
     //Initializes array of basestats
     private void initializeBaseStats() throws IOException {
-        InputStream in = getClass().getResourceAsStream("/basestats.csv");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        for (int i = 0; i < 251; i++)
-            baseStats[i] = reader.readLine().split(",");
-        System.out.println(Arrays.deepToString(baseStats));
+        try {
+            InputStream in = getClass().getResourceAsStream("/basestats.csv");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            for (int i = 0; i < 251; i++)
+                baseStats[i] = reader.readLine().split(",");
+            System.out.println(Arrays.deepToString(baseStats));
+        } catch (NullPointerException e) {
+            throw new RuntimeException("basestats.csv not present");
+        }
     }
 
     private void typeToLabels() {
@@ -72,22 +81,27 @@ public class Main extends Application {
 
     //initializes moveset array by reading the movesets.txt file and adding each moveset as a list to the index of the Pokemon in the pokemonstats list.
     private void initializeMovesets() throws IOException {
-        InputStream in = getClass().getResourceAsStream("/movesets.tsv");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        for (int i=0; i<251; i++) {
-            List<String> moves;
-            String line = reader.readLine().trim();
-            moves = List.of(line.split("\t"));
-            pokemonEvosAndMovesets.add(moves);
+        try {
+            InputStream in = getClass().getResourceAsStream("/movesets.tsv");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            for (int i=0; i<251; i++) {
+                List<String> moves;
+                String line = reader.readLine().trim();
+                moves = List.of(line.split("\t"));
+                pokemonEvosAndMovesets.add(moves);
+            }
+        } catch (NullPointerException e) {
+            throw new RuntimeException("movesets.tsv not present");
         }
+
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        initializePokemon();
-        initializeMovesets();
-        initializeMoveInformation();
-        initializeBaseStats();
+            initializePokemon();
+            initializeMovesets();
+            initializeMoveInformation();
+            initializeBaseStats();
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
 //        loader.setControllerFactory(controllerClass -> new MainController());
 

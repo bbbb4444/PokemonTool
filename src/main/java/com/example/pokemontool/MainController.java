@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class MainController {
@@ -48,11 +49,10 @@ public class MainController {
     @FXML
     VBox evoVBox;
 
-    Pokemon myPokemon = new Pokemon();
+    Pokemon myPokemon = new Pokemon("Charmander");
 
     //loads Charmander when program is first loaded
     public void initialize() {
-        myPokemon.changePokemon("Charmander");
         updateGUI(myPokemon);
     }
 
@@ -100,9 +100,13 @@ public class MainController {
                 return new Image(url);
             }
         };
-        pokemonIcon.setImage(new Image(getClass().getResourceAsStream("/loading.gif")));
-        pokemonIcon.setFitWidth(64);
-        pokemonIcon.setFitHeight(64);
+        try {
+            pokemonIcon.setImage(new Image(getClass().getResourceAsStream("/loading.gif")));
+            pokemonIcon.setFitWidth(64);
+            pokemonIcon.setFitHeight(64);
+        } catch (NullPointerException e) {
+            throw new RuntimeException("loading.gif not present");
+        }
 
         imageTask.stateProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
@@ -140,7 +144,6 @@ public class MainController {
     //given the index of a Pokemon, display its evolution information
     private void displayEvolutionInfo(int pokeIndex) {
         evoVBox.getChildren().clear();
-
         int evoDataIndex = 1;
         String evoDataLine = Main.pokemonEvosAndMovesets.get(pokeIndex).get(evoDataIndex).trim();
         if (evoDataLine.equals("db 0 ; no more evolutions")) {
