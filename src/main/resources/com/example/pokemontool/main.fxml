@@ -48,41 +48,50 @@
          </padding></VBox>
       <HBox fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="214.0" prefWidth="387.0">
          <children>
-            <GridPane fx:id="baseStatsGrid" minHeight="115.0" minWidth="135.0" prefHeight="143.0" prefWidth="137.0">
-               <columnConstraints>
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="29.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="171.0" minWidth="10.0" prefWidth="25.0" />
-                  <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="90.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
+            <VBox prefHeight="200.0" prefWidth="175.0">
                <children>
-                  <Label text="HP" />
-                  <Label text="ATK" GridPane.rowIndex="1" />
-                  <Label text="DEF" GridPane.rowIndex="2" />
-                  <Label text="SPA" GridPane.rowIndex="3" />
-                  <Label text="SPD" GridPane.rowIndex="4" />
-                  <Label text="SPE" GridPane.rowIndex="5" />
-                  <Label fx:id="hpVal" text="0" GridPane.columnIndex="1" />
-                  <Label fx:id="atkVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label fx:id="defVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label fx:id="speVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label fx:id="spaVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Label fx:id="spdVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <Rectangle fx:id="hpBar" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="16.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" />
-                  <Rectangle fx:id="atkBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Rectangle fx:id="defBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="47.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <Rectangle fx:id="speBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="77.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <Rectangle fx:id="spaBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="107.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                  <Rectangle fx:id="spdBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="107.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                  <HBox fx:id="typeContainer" alignment="CENTER" minHeight="24.0" spacing="10.0">
+                     <VBox.margin>
+                        <Insets bottom="4.0" top="4.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <GridPane fx:id="baseStatsGrid" minHeight="115.0" minWidth="135.0" prefHeight="143.0" prefWidth="137.0">
+                     <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="26.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="171.0" minWidth="10.0" prefWidth="24.0" />
+                        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="112.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label text="HP" />
+                        <Label text="ATK" GridPane.rowIndex="1" />
+                        <Label text="DEF" GridPane.rowIndex="2" />
+                        <Label text="SPA" GridPane.rowIndex="3" />
+                        <Label text="SPD" GridPane.rowIndex="4" />
+                        <Label text="SPE" GridPane.rowIndex="5" />
+                        <Label fx:id="hpVal" text="0" GridPane.columnIndex="1" />
+                        <Label fx:id="atkVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="defVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label fx:id="speVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label fx:id="spaVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label fx:id="spdVal" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Rectangle fx:id="hpBar" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="16.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" />
+                        <Rectangle fx:id="atkBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Rectangle fx:id="defBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="47.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Rectangle fx:id="speBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="77.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Rectangle fx:id="spaBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="107.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <Rectangle fx:id="spdBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="16.0" layoutX="59.0" layoutY="107.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                     </children>
+                  </GridPane>
                </children>
-            </GridPane>
+            </VBox>
             <VBox alignment="TOP_RIGHT" fillWidth="false" prefHeight="214.0" prefWidth="202.0" HBox.hgrow="SOMETIMES">
                <children>
                   <ScrollPane fitToHeight="true" maxHeight="-Infinity" prefHeight="214.0" prefWidth="170.0" VBox.vgrow="SOMETIMES">
@@ -97,7 +106,6 @@
             <Insets bottom="8.0" />
          </VBox.margin>
       </HBox>
-      <Label styleClass="type" text="Label" />
       <GridPane fx:id="moveDetailGrid" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefWidth="383.0" VBox.vgrow="ALWAYS">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />

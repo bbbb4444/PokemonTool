@@ -11,9 +11,7 @@
 
 }
 
-.type {
-    -fx-background: #d6d6d6;
-    -fx-border-style: solid;
+.type-style {
     -fx-padding: 4px 8px;
-    -fx-border-radius: 16px;
+    -fx-background-radius: 16px;
 }

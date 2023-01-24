@@ -1,5 +1,7 @@
 package com.example.pokemontool;
 
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,18 +10,54 @@ public class Pokemon {
     String pokemonName;
     int pokemonIndex;
     ArrayList<String[]> moveset;
-    private enum Type {
-        NORMAL, FIGHTING, FLYING, POISON, GROUND, ROCK, BUG, GHOST, STEEL, FIRE, WATER, GRASS, ELECTRIC, PSYCHIC, ICE, DRAGON, DARK
+    int[] baseStats;
+    Type[] type;
+    public enum Type {
+        NORMAL("normal", Color.web("A8A77A")),
+        FIGHTING("fighting", Color.web("C22E28")),
+        FLYING("flying", Color.web("A98FF3")),
+        POISON("poison", Color.web("A33EA1")),
+        GROUND("ground", Color.web("E2BF65")),
+        ROCK("rock", Color.web("B6A136")),
+        BUG("bug", Color.web("A6B91A")),
+        GHOST("ghost", Color.web("735797")),
+        STEEL("steel", Color.web("B7B7CE")),
+        FIRE("fire", Color.web("EE8130")),
+        WATER("water", Color.web("6390F0")),
+        GRASS("grass", Color.web("7AC74C")),
+        ELECTRIC("electric", Color.web("F7D02C")),
+        PSYCHIC("psychic", Color.web("F95587")),
+        ICE("ice", Color.web("96D9D6")),
+        DRAGON("dragon", Color.web("6F35FC")),
+        DARK("dark", Color.web("705746"));
+
+        private final String type;
+        private final Color color;
+        Type(String type, Color color) {
+            this.type = type;
+            this.color = color;
+        }
+        public String getType() {
+            return type;
+        }
+        public Color getColor() {
+            return color;
+        }
     }
+
     public Pokemon(String name) {
         pokemonName = name;
         pokemonIndex = indexOf(name);
         moveset = generateMoveset(pokemonIndex);
+        baseStats = generateBaseStats(pokemonIndex);
+        type = generateType(pokemonIndex);
     }
     public void changePokemon(String name) {
         pokemonName = name;
         pokemonIndex = indexOf(name);
         moveset = generateMoveset(pokemonIndex);
+        baseStats = generateBaseStats(pokemonIndex);
+        type = generateType(pokemonIndex);
     }
 
     private ArrayList<String[]> generateMoveset(int pokeIndex) {
@@ -42,6 +80,21 @@ public class Pokemon {
             arrayListBuilder.add(pokemonMoveArray);
         }
         return arrayListBuilder;
+    }
+    private int[] generateBaseStats(int pokeIndex) {
+        int[] baseStats = new int[6];
+        System.out.println(baseStats.length);
+        for (int i = 0; i < baseStats.length; i++) {
+            baseStats[i] = Integer.parseInt(Main.baseStats[pokeIndex][i+1]); //Name at index 0, stats start at index 1
+        }
+        return baseStats;
+    }
+    private Type[] generateType(int pokeIndex) {
+        Type[] type = new Type[2];
+        for (int i = 7, t = 0; i < Main.baseStats[pokeIndex].length; i++, t++) {
+            type[t] = Type.valueOf(Main.baseStats[pokeIndex][i].toUpperCase());
+        }
+        return type;
     }
 
     public void incrementPokemon(int incrementVal) {

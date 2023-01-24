@@ -18,7 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class MainController {
@@ -43,6 +42,8 @@ public class MainController {
     @FXML
     Label moveVal, typeVal, categoryVal, ppVal, powerVal, accuracyVal, effectVal;
     @FXML
+    HBox typeContainer;
+    @FXML
     GridPane moveDetailGrid;
     @FXML
     VBox mainVBox;
@@ -50,6 +51,7 @@ public class MainController {
     VBox evoVBox;
 
     Pokemon myPokemon = new Pokemon("Charmander");
+
 
     //loads Charmander when program is first loaded
     public void initialize() {
@@ -85,10 +87,11 @@ public class MainController {
     //calls all the necessary methods to update the GUI for the provided Pokemon
     private void updateGUI(Pokemon pokemon) {
         int pokemonIndex = pokemon.getPokemonIndex();
-        populateStatsArea(pokemonIndex);
+        populateStatsArea();
         displayImage(pokemonIndex);
         displayMoveset();
         displayEvolutionInfo(pokemonIndex);
+        populateTypeTags();
     }
 
     //grabs pokemon icon from pkmn.net and displays it
@@ -188,23 +191,50 @@ public class MainController {
             pokemonMovesetsVBox.getChildren().add(entry);
         }
     }
+    //Populates type tags
+    private void populateTypeTags() {
+        typeContainer.getChildren().clear();
+        String opacity = "99";
+
+        Pokemon.Type[] type = myPokemon.type;
+        Label typeOne = new Label();
+        typeOne.getStyleClass().add("type-style");
+        String hexTypeOneColor = "#" + type[0].getColor().toString().substring(2,8) + opacity;
+        typeOne.setStyle("-fx-background-color: " + hexTypeOneColor);
+        typeOne.setText(String.valueOf(type[0]));
+        typeContainer.getChildren().add(typeOne);
+        if (type[1] != null) {
+            Label typeTwo = new Label();
+            typeTwo.getStyleClass().add("type-style");
+            String hexTypeTwoColor = "#" + type[1].getColor().toString().substring(2,8) + opacity;
+            typeTwo.setStyle("-fx-background-color: " + hexTypeTwoColor);
+            typeTwo.setText(String.valueOf(type[1]));
+            typeContainer.getChildren().add(typeTwo);
+        }
+    }
 
     //Populates Pokemon basestats area
-    private void populateStatsArea(int pokeIndex) {
-        String[][] baseStats = Main.baseStats;
-        int stat_index = 1;
-        int bar_index = 1;
+    private void populateStatsArea() {
+        int[] baseStats = myPokemon.baseStats;
+
+        int stat_index = 0;
+        int bar_index = 0;
+        //Loop through nodes in the base stats grid.
+        // Column index 1 is for the raw stat value.
+        // Column index 2 is for the corresponding visual bar length and color
         for (Node node : baseStatsGrid.getChildren()) {
+
             if (GridPane.getColumnIndex(node) != null){
+
                 if (GridPane.getColumnIndex(node) == 1) {
                     Label stat = (Label) node;
-                    stat.setText(baseStats[pokeIndex][stat_index]);
+                    stat.setText(String.valueOf(baseStats[stat_index]));
                     stat_index++;
                 }
                 else if (GridPane.getColumnIndex(node) == 2) {
                     Rectangle bar = (Rectangle) node;
-                    bar.setWidth(Integer.parseInt(baseStats[pokeIndex][bar_index])*0.8);
-                    bar.setFill(Color.hsb(Integer.parseInt(baseStats[pokeIndex][bar_index])-25,1.0,1.0));
+                    bar.setWidth(Integer.parseInt(String.valueOf(baseStats[bar_index]))*0.8);
+                    bar.setFill(Color.hsb(Integer.parseInt(String.valueOf(baseStats[bar_index]))-25,1.0,1.0));
                     bar_index++;
                 }
             }
