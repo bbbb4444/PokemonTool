@@ -7,11 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Pokemon {
-    String pokemonName;
-    int pokemonIndex;
-    ArrayList<String[]> moveset;
-    int[] baseStats;
-    Type[] type;
+    private String pokemonName;
+    private int pokemonIndex;
+    private ArrayList<String[]> moveset;
+    private int[] baseStats;
+    private Type[] type;
+
     public enum Type {
         NORMAL("normal", Color.web("A8A77A")),
         FIGHTING("fighting", Color.web("C22E28")),
@@ -110,6 +111,8 @@ public class Pokemon {
     public String getPokemonName() {
         return(pokemonName);
     }
+    public int[] getBaseStats() { return(baseStats); }
+    public Type[] getType() { return(type); }
     public ArrayList<String[]> getMoveset() { return(moveset); }
 
     public boolean isPhysical (String category) {

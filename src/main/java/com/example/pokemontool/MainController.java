@@ -79,7 +79,7 @@ public class MainController {
     //Update pokemon_name variable when Pokemon name is entered
     public void changePokemonManually() {
         String newPokeName = pokemonSearchField.getText().toLowerCase();
-        myPokemon.changePokemon(newPokeName);
+        Pokemon myPokemon = new Pokemon(newPokeName);
         updateGUI(myPokemon);
     }
 
@@ -194,9 +194,9 @@ public class MainController {
     //Populates type tags
     private void populateTypeTags() {
         typeContainer.getChildren().clear();
-        String opacity = "99";
+        int opacity = 99;
 
-        Pokemon.Type[] type = myPokemon.type;
+        Pokemon.Type[] type = myPokemon.getType();
         Label typeOne = new Label();
         typeOne.getStyleClass().add("type-style");
         String hexTypeOneColor = "#" + type[0].getColor().toString().substring(2,8) + opacity;
@@ -215,7 +215,7 @@ public class MainController {
 
     //Populates Pokemon basestats area
     private void populateStatsArea() {
-        int[] baseStats = myPokemon.baseStats;
+        int[] baseStats = myPokemon.getBaseStats();
 
         int stat_index = 0;
         int bar_index = 0;
