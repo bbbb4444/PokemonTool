@@ -1,14 +1,14 @@
 package com.example.pokemontool;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -18,9 +18,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-public class MainController {
+public class MainController implements Initializable {
+    @FXML
+    ImageView boxImage0, boxImage1, boxImage2, boxImage3, boxImage4, boxImage5;
     @FXML
     Label evoLvlLabel;
     @FXML
@@ -54,8 +58,10 @@ public class MainController {
 
 
     //loads Charmander when program is first loaded
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         updateGUI(myPokemon);
+        loadContextMenu();
     }
 
     //opens a new instance of the program for the use of comparing Pokemon
@@ -64,8 +70,14 @@ public class MainController {
         Stage PrimaryStage = new Stage();
         main.start(PrimaryStage);
     }
-
-
+    private void loadContextMenu() {
+        MenuItem saveMI = new MenuItem("Save");
+        MenuItem loadMI = new MenuItem("Load");
+        ContextMenu boxCM = new ContextMenu();
+        boxCM.getItems().add(saveMI);
+        boxCM.getItems().add(loadMI);
+        boxImage0.setOnContextMenuRequested(e -> boxCM.show(boxImage0, e.getScreenX(), e.getScreenY()));
+    }
 
     public void goToNextPoke() {
         myPokemon.incrementPokemon(1);
@@ -86,20 +98,19 @@ public class MainController {
 
     //calls all the necessary methods to update the GUI for the provided Pokemon
     private void updateGUI(Pokemon pokemon) {
-        int pokemonIndex = pokemon.getPokemonIndex();
         populateStatsArea();
-        displayImage(pokemonIndex);
+        displayImage();
         displayMoveset();
-        displayEvolutionInfo(pokemonIndex);
+        displayEvolutionInfo();
         populateTypeTags();
     }
 
     //grabs pokemon icon from pkmn.net and displays it
-    private void displayImage(int pokeIndex) {
+    private void displayImage() {
         Task<Image> imageTask = new Task<>() {
             @Override
             protected Image call() {
-                String url = "https://pkmn.net/sprites/crystal/" + (pokeIndex+1) + ".gif";
+                String url = myPokemon.getPictureURL();
                 return new Image(url);
             }
         };
@@ -145,8 +156,9 @@ public class MainController {
     }
 
     //given the index of a Pokemon, display its evolution information
-    private void displayEvolutionInfo(int pokeIndex) {
+    private void displayEvolutionInfo() {
         evoVBox.getChildren().clear();
+        int pokeIndex = myPokemon.getPokemonIndex();
         int evoDataIndex = 1;
         String evoDataLine = Main.pokemonEvosAndMovesets.get(pokeIndex).get(evoDataIndex).trim();
         if (evoDataLine.equals("db 0 ; no more evolutions")) {
@@ -156,7 +168,7 @@ public class MainController {
         else {
             while (!evoDataLine.equals("db 0 ; no more evolutions")) {
                 String[] evoData = evoDataLine.split("~");
-                for (int i = 0; i<evoData.length;i++) {
+                for (int i = 0; i < evoData.length; i++) {
                     evoData[i] = toTitleCase(evoData[i]);
                 }
                 if (evoDataLine.startsWith("db EVOLVE ITEM")) {
@@ -172,11 +184,8 @@ public class MainController {
                 evoDataIndex++;
                 evoDataLine = Main.pokemonEvosAndMovesets.get(pokeIndex).get(evoDataIndex).trim();
             }
-            try {
-                evoVBox.getScene().getWindow().sizeToScene();
-            } catch (NullPointerException e) {
-                System.out.println("Whoops");
-            }
+            Platform.runLater(this::fixWindowSize); //Needed because scene is not fully loaded when fixWindowSize
+                                                    //is first called from this method, causing null pointer exception
         }
     }
 
@@ -282,4 +291,6 @@ public class MainController {
         }
         return builder.toString();
     }
+
+
 }

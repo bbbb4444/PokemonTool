@@ -16,6 +16,30 @@
 
 <VBox fx:id="mainVBox" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pokemontool.MainController">
    <children>
+      <GridPane alignment="CENTER" gridLinesVisible="true" hgap="8.0" prefHeight="46.0" prefWidth="350.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="48.0" prefWidth="48.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="48.0" prefWidth="48.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="48.0" prefWidth="48.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="48.0" prefWidth="48.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="48.0" prefWidth="48.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="48.0" prefWidth="48.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="-Infinity" minHeight="48.0" prefHeight="48.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <VBox.margin>
+            <Insets bottom="25.0" />
+         </VBox.margin>
+         <children>
+            <ImageView fx:id="boxImage0" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="boxImage1" fitHeight="48.0" fitWidth="48.0" layoutX="21.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+            <ImageView fx:id="boxImage2" fitHeight="48.0" fitWidth="48.0" layoutX="77.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+            <ImageView fx:id="boxImage3" fitHeight="48.0" fitWidth="48.0" layoutX="21.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+            <ImageView fx:id="boxImage4" fitHeight="48.0" fitWidth="48.0" layoutX="21.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+            <ImageView fx:id="boxImage5" fitHeight="48.0" fitWidth="48.0" layoutX="21.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
+         </children>
+      </GridPane>
       <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="383.0" spacing="10.0">
          <children>
             <StackPane maxHeight="-Infinity" prefHeight="66.0" prefWidth="66.0">

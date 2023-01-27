@@ -12,7 +12,7 @@ public class Pokemon {
     private ArrayList<String[]> moveset;
     private int[] baseStats;
     private Type[] type;
-
+    private String pictureURL;
     public enum Type {
         NORMAL("normal", Color.web("A8A77A")),
         FIGHTING("fighting", Color.web("C22E28")),
@@ -47,18 +47,16 @@ public class Pokemon {
     }
 
     public Pokemon(String name) {
-        pokemonName = name;
-        pokemonIndex = indexOf(name);
-        moveset = generateMoveset(pokemonIndex);
-        baseStats = generateBaseStats(pokemonIndex);
-        type = generateType(pokemonIndex);
+        changePokemon(name);
     }
+
     public void changePokemon(String name) {
         pokemonName = name;
         pokemonIndex = indexOf(name);
         moveset = generateMoveset(pokemonIndex);
         baseStats = generateBaseStats(pokemonIndex);
         type = generateType(pokemonIndex);
+        pictureURL = "https://pkmn.net/sprites/crystal/" + (pokemonIndex+1) + ".gif";
     }
 
     private ArrayList<String[]> generateMoveset(int pokeIndex) {
@@ -84,7 +82,6 @@ public class Pokemon {
     }
     private int[] generateBaseStats(int pokeIndex) {
         int[] baseStats = new int[6];
-        System.out.println(baseStats.length);
         for (int i = 0; i < baseStats.length; i++) {
             baseStats[i] = Integer.parseInt(Main.baseStats[pokeIndex][i+1]); //Name at index 0, stats start at index 1
         }
@@ -114,6 +111,7 @@ public class Pokemon {
     public int[] getBaseStats() { return(baseStats); }
     public Type[] getType() { return(type); }
     public ArrayList<String[]> getMoveset() { return(moveset); }
+    public String getPictureURL() { return(pictureURL); }
 
     public boolean isPhysical (String category) {
         List<String> physicalTypes = new ArrayList<>(
