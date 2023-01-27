@@ -1,9 +1,15 @@
 package com.example.pokemontool;
 
-public class PokemonBox {
-    private Pokemon[] box = new Pokemon[5];
+import java.util.Arrays;
 
-    public void changeBoxedPokemon(Pokemon pokemon, int boxIndex) {
-        box[boxIndex] = pokemon;
+public class PokemonBox {
+    private final Pokemon[] box = new Pokemon[6];
+
+    public void setBoxedPokemon(Pokemon pokemon, int boxIndex) {
+        box[boxIndex] = pokemon.clone();
+        System.out.println(Arrays.toString(box));
+    }
+    public Pokemon getBoxedPokemon(int boxIndex) {
+        return box[boxIndex];
     }
 }

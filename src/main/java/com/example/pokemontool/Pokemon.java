@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Pokemon {
+public class Pokemon implements Cloneable {
     private String pokemonName;
     private int pokemonIndex;
     private ArrayList<String[]> moveset;
@@ -44,6 +44,12 @@ public class Pokemon {
         public Color getColor() {
             return color;
         }
+    }
+
+    @Override
+    public Pokemon clone() {
+        try { return (Pokemon) super.clone(); }
+        catch (CloneNotSupportedException e) { throw new InternalError(e); }
     }
 
     public Pokemon(String name) {
@@ -119,7 +125,7 @@ public class Pokemon {
         return (physicalTypes.contains(category));
     }
     //Given a pokemon index, return the name of that pokemon
-    private String nameOf(int pokeIndex) {
+    public String nameOf(int pokeIndex) {
         return Main.pokemon.get(pokeIndex);
     }
 

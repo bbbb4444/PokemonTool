@@ -26,6 +26,8 @@ public class MainController implements Initializable {
     @FXML
     ImageView boxImage0, boxImage1, boxImage2, boxImage3, boxImage4, boxImage5;
     @FXML
+    GridPane boxGrid;
+    @FXML
     Label evoLvlLabel;
     @FXML
     TextField pokemonSearchField;
@@ -55,13 +57,14 @@ public class MainController implements Initializable {
     VBox evoVBox;
 
     Pokemon myPokemon = new Pokemon("Charmander");
-
+    PokemonBox pokemonBox = new PokemonBox();
 
     //loads Charmander when program is first loaded
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        updateGUI(myPokemon);
-        loadContextMenu();
+        updateGUI();
+        Platform.runLater(this::loadContextMenu);
+
     }
 
     //opens a new instance of the program for the use of comparing Pokemon
@@ -71,42 +74,68 @@ public class MainController implements Initializable {
         main.start(PrimaryStage);
     }
     private void loadContextMenu() {
-        MenuItem saveMI = new MenuItem("Save");
-        MenuItem loadMI = new MenuItem("Load");
-        ContextMenu boxCM = new ContextMenu();
-        boxCM.getItems().add(saveMI);
-        boxCM.getItems().add(loadMI);
-        boxImage0.setOnContextMenuRequested(e -> boxCM.show(boxImage0, e.getScreenX(), e.getScreenY()));
-    }
 
+        for (Node node : boxGrid.getChildrenUnmodifiable()) {
+            if (node instanceof ImageView) {
+                System.out.println(node);
+                int startingIndex = 8;
+                int gridIndex = Integer.parseInt(node.getId().substring(startingIndex));
+
+                MenuItem saveMI = new MenuItem("Save");
+                saveMI.setOnAction(event -> saveBoxedPokemon(gridIndex, node));
+
+                MenuItem loadMI = new MenuItem("Load");
+                loadMI.setOnAction(event -> loadBoxedPokemon(gridIndex));
+
+                ContextMenu boxCM = new ContextMenu();
+                boxCM.getItems().add(saveMI);
+                boxCM.getItems().add(loadMI);
+                node.setOnContextMenuRequested(e -> boxCM.show(node, e.getScreenX(), e.getScreenY()));
+            }
+        }
+    }
+    private void saveBoxedPokemon(int index, Node imageView) {
+        pokemonBox.setBoxedPokemon(myPokemon, index);
+        displayImage((ImageView) imageView);
+
+    }
+    private void loadBoxedPokemon(int index) {
+        myPokemon = pokemonBox.getBoxedPokemon(index);
+        updateGUI();
+    }
     public void goToNextPoke() {
-        myPokemon.incrementPokemon(1);
-        updateGUI(myPokemon);
+        int nextIndex =myPokemon.getPokemonIndex()+1;
+        String nextPoke = myPokemon.nameOf(nextIndex);
+        myPokemon = new Pokemon(nextPoke);
+        updateGUI();
     }
     public void goToPrevPoke() {
-        myPokemon.incrementPokemon(-1);
-        updateGUI(myPokemon);
+        int prevIndex =myPokemon.getPokemonIndex()-1;
+        String prevPoke = myPokemon.nameOf(prevIndex);
+        myPokemon = new Pokemon(prevPoke);
+        updateGUI();
     }
 
     //Update pokemon_name variable when Pokemon name is entered
     public void changePokemonManually() {
         String newPokeName = pokemonSearchField.getText().toLowerCase();
-        Pokemon myPokemon = new Pokemon(newPokeName);
-        updateGUI(myPokemon);
+        if (!Main.pokemon.contains("newPokeName")) { return; }
+        myPokemon = new Pokemon(newPokeName);
+        updateGUI();
     }
 
 
     //calls all the necessary methods to update the GUI for the provided Pokemon
-    private void updateGUI(Pokemon pokemon) {
+    private void updateGUI() {
         populateStatsArea();
-        displayImage();
+        displayImage(pokemonIcon);
         displayMoveset();
         displayEvolutionInfo();
         populateTypeTags();
     }
 
     //grabs pokemon icon from pkmn.net and displays it
-    private void displayImage() {
+    private void displayImage(ImageView imageView) {
         Task<Image> imageTask = new Task<>() {
             @Override
             protected Image call() {
@@ -115,18 +144,23 @@ public class MainController implements Initializable {
             }
         };
         try {
-            pokemonIcon.setImage(new Image(getClass().getResourceAsStream("/loading.gif")));
-            pokemonIcon.setFitWidth(64);
-            pokemonIcon.setFitHeight(64);
+            imageView.setImage(new Image(getClass().getResourceAsStream("/loading.gif")));
+            imageView.setFitWidth(64);
+            imageView.setFitHeight(64);
         } catch (NullPointerException e) {
             throw new RuntimeException("loading.gif not present");
         }
 
         imageTask.stateProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
-                pokemonIcon.setImage(imageTask.getValue());
-                pokemonIcon.setFitWidth(0);
-                pokemonIcon.setFitHeight(0);
+
+                imageView.setImage(imageTask.getValue());
+                imageView.setFitWidth(0);
+                imageView.setFitHeight(0);
+                if (!imageView.getId().equals(pokemonIcon.getId())) {
+                    imageView.setScaleX(0.5);
+                    imageView.setScaleY(0.5);
+                }
             }
         });
         new Thread(imageTask).start();
